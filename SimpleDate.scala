@@ -23,7 +23,7 @@ object Main
 		}
 
 		override def toString = month + "/" + day + "/" + year
-		override def hashCode : Int = year * daysInYear + ordinalDate
+		override def hashCode: Int = year * daysInYear + ordinalDate
 
 		def compareTo(that: SimpleDate): Int = this.hashCode.compare(that.hashCode)
 
@@ -78,11 +78,11 @@ object Main
 		}
 
 		// could take advantage of anonymouse functions here..
-		def daysAgo(n: Int) : SimpleDate = {
+		def daysAgo(n: Int): SimpleDate = {
 			var newDate: SimpleDate = this
 
-		    //if(n < 0)
-		    // 	return daysFromNow(n * -1)
+			if(n < 0)
+			 	return daysFromNow(n * -1)
 
 		    for(i <- 0 until n)
 		    	newDate = newDate.prevDate
@@ -90,11 +90,11 @@ object Main
 		    newDate
 		}
 
-		def daysFromNow(n: Int) : SimpleDate = {
+		def daysFromNow(n: Int): SimpleDate = {
 			var newDate: SimpleDate = this
 
-			//if(n < 0)
-		   	//	return daysAgo(n * -1)
+			if(n < 0)
+				return daysAgo(n * -1)
 
 		    for(i <- 0 until n)
 		      newDate = newDate.nextDate
@@ -103,7 +103,6 @@ object Main
 		}
 	}
 
-	// This essentially acts as the static methods
 	object SimpleDate
 	{
 		var MIN_YEAR = 1753
@@ -114,11 +113,11 @@ object Main
 		var DAYS_IN_MONTH = Array(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 		var DAYS_THUS_FAR = Array(0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334)
 
-		def isLeapYear(year: Int) : Boolean = if(!(year % 100 == 0 && year % 400 != 0)) year % 4 == 0 else false
-		def daysInYear(year: Int) : Int = if(isLeapYear(year)) DAYS_LEAP_YEAR else DAYS_YEAR
-		def daysInMonth(month: Int, year: Int) : Int = DAYS_IN_MONTH(month) + (if(isLeapYear(year) && month == 2) 1 else 0)
+		def isLeapYear(year: Int): Boolean = if(!(year % 100 == 0 && year % 400 != 0)) year % 4 == 0 else false
+		def daysInYear(year: Int): Int = if(isLeapYear(year)) DAYS_LEAP_YEAR else DAYS_YEAR
+		def daysInMonth(month: Int, year: Int): Int = DAYS_IN_MONTH(month) + (if(isLeapYear(year) && month == 2) 1 else 0)
 
-		def validDate(month: Int, day: Int, year: Int) : Boolean = {
+		def validDate(month: Int, day: Int, year: Int): Boolean = {
 			year >= MIN_YEAR &&
 		 	(1 to NUM_MONTHS).contains(month) && 
 			(1 to daysInYear(year)).contains(day) && 
@@ -128,9 +127,9 @@ object Main
 
 	def main(args: Array[String]) {
 		//val date = new SimpleDate(2, 30, 1904) // invalid
-		val date = new SimpleDate(2, 29, 1905) // invalid
+		//val date = new SimpleDate(2, 29, 1905) // invalid
 		//val date = new SimpleDate(2, 29, 1904)
-		//val date = new SimpleDate(12, 31, 1905)
+		val date = new SimpleDate(12, 31, 1905)
 
 		printf("Testing %s ...\n", date)
 		println("Valid? " + date.validDate)
@@ -139,6 +138,8 @@ object Main
 		println("Days in month: " + date.daysInMonth)
 		println("5 days from now: " + date.daysFromNow(5))
 		println("5 days ago: " + date.daysAgo(5))
+		println("2 years from now: " + date.daysFromNow(365 * 2))
+		println("2 years ago: " + date.daysAgo(365 * 2))
 	}
 }
 
