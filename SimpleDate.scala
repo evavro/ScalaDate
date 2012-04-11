@@ -24,7 +24,7 @@ object Main
 
 		def compareTo(that: SimpleDate): Int = this.hashCode.compare(that.hashCode)
 
-		def isLeapYear: Boolean = SimpleDate.isLeapYear(year)
+		def isLeapYear: Boolean =SimpleDate.isLeapYear(year)
 		def validDate: Boolean = SimpleDate.validDate(month, day, year)
 		def daysInYear: Int = SimpleDate.daysInYear(year)
 		def daysInMonth: Int = SimpleDate.daysInMonth(month, year)
@@ -33,7 +33,7 @@ object Main
 		    var daysTotal = 0
 
 		    (0 until month).foreach {
-		    	m => (daysTotal += SimpleDate.daysInMonth(m, year))
+				m => (daysTotal += SimpleDate.daysInMonth(m, year))
 			}
 
 			daysTotal + day
@@ -126,13 +126,16 @@ object Main
 	}
 
 	def main(args: Array[String]) {
-		var date = new SimpleDate(2, 30, 1904)
-		var date2 = new SimpleDate(2, 26, 2011)
+		//var date = new SimpleDate(2, 30, 1904) // invalid
+		//var date = new SimpleDate(2, 29, 1905) // invalid
+		var date = new SimpleDate(2, 29, 1904)
+		//var date = new SimpleDate(12, 31, 1905)
 
-		println("Testing SimpleDate...\n")
-		println(date)
+		printf("Testing %s ...\n", date)
 		println("Valid? " + date.validDate)
 		println("Is leap year? " + date.isLeapYear)
+		println("Ordinal date: " + date.ordinalDate)
+		println("Days in month: " + date.daysInMonth)
 	}
 }
 
