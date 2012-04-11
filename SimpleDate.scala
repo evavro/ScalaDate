@@ -10,6 +10,9 @@ object Main
 	{
 		import WeekDay._
 
+		//if(!validDate)
+		//	throw new IllegalArgumentException("The provided date is invalid")
+
 		def dayOfWeek: WeekDay = {
 			val zellerMonth = if (month > 2) month else month + 12
 		    val yearOfCentury = year % 100
@@ -43,16 +46,14 @@ object Main
 		def prevDate: SimpleDate = {
 		    var newYear = year
 		    var newMonth = month
-		    var newDay = day
+		    var newDay = day - 1
 
-		    if(newDay > SimpleDate.daysInMonth(month, year)) {
-		    	newDay = 1
-		    	newMonth += 1
+		    if(newDay < 1) {
+		    	newMonth = if(newMonth -1 == 0) SimpleDate.NUM_MONTHS else newMonth - 1
+		    	newDay = SimpleDate.daysInMonth(newMonth, year)
 
-		    	if(newMonth > SimpleDate.NUM_MONTHS) {
-		    		newMonth = 1
-		    		newYear += 1
-		    	}
+		    	if(newMonth == SimpleDate.NUM_MONTHS)
+		    		newYear -= 1
 		    }
 
 		    new SimpleDate(newMonth, newDay, newYear)
@@ -77,25 +78,25 @@ object Main
 		}
 
 		// could take advantage of anonymouse functions here..
-		def daysAgo(n: Int) {
+		def daysAgo(n: Int) : SimpleDate = {
 			var newDate: SimpleDate = this
 
-		    if(n < 0)
-		     	return daysFromNow(n * -1)
+		    //if(n < 0)
+		    // 	return daysFromNow(n * -1)
 
-		    for(i <- 0 to n)
+		    for(i <- 0 until n)
 		    	newDate = newDate.prevDate
 
 		    newDate
 		}
 
-		def daysFromNow(n: Int) {
+		def daysFromNow(n: Int) : SimpleDate = {
 			var newDate: SimpleDate = this
 
-			if(n < 0)
-		   		return daysAgo(n * -1)
+			//if(n < 0)
+		   	//	return daysAgo(n * -1)
 
-		    for(i <- 0 to n)
+		    for(i <- 0 until n)
 		      newDate = newDate.nextDate
 
 		    newDate
@@ -126,16 +127,18 @@ object Main
 	}
 
 	def main(args: Array[String]) {
-		//var date = new SimpleDate(2, 30, 1904) // invalid
-		//var date = new SimpleDate(2, 29, 1905) // invalid
-		var date = new SimpleDate(2, 29, 1904)
-		//var date = new SimpleDate(12, 31, 1905)
+		//val date = new SimpleDate(2, 30, 1904) // invalid
+		val date = new SimpleDate(2, 29, 1905) // invalid
+		//val date = new SimpleDate(2, 29, 1904)
+		//val date = new SimpleDate(12, 31, 1905)
 
 		printf("Testing %s ...\n", date)
 		println("Valid? " + date.validDate)
 		println("Is leap year? " + date.isLeapYear)
 		println("Ordinal date: " + date.ordinalDate)
 		println("Days in month: " + date.daysInMonth)
+		println("5 days from now: " + date.daysFromNow(5))
+		println("5 days ago: " + date.daysAgo(5))
 	}
 }
 
