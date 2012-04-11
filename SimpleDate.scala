@@ -3,31 +3,18 @@ object Main
 	object WeekDay extends Enumeration
 	{
 		type WeekDay = Value
-		val Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday = Value
+		//val Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday = Value
+		val Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday = Value
 	}
 
-	class SimpleDate(month: Int, day: Int, year: Int) // extends Ordered[Int] //extends DateOrd
+	class SimpleDate(month: Int, day: Int, year: Int)
 	{
 		import WeekDay._
 
 		//if(!validDate)
 		//	throw new IllegalArgumentException("The provided date is invalid")
 
-		def dayOfWeek: WeekDay = {
-			val zellerMonth = if (month > 2) month else month + 12
-		    val yearOfCentury = year % 100
-		    val century = year / 100
-		    val dayWeek = (day - 1 + ((13 * (zellerMonth + 1)) / 5) + yearOfCentury + (yearOfCentury / 4) + (century / 4) + 5 * century) % 7
-
-		    WeekDay.apply(((dayWeek + 5) % 7) + 1)
-		}
-
-		override def toString = month + "/" + day + "/" + year
-		override def hashCode: Int = year * daysInYear + ordinalDate
-
-		def compareTo(that: SimpleDate): Int = this.hashCode.compare(that.hashCode)
-
-		def isLeapYear: Boolean =SimpleDate.isLeapYear(year)
+		def isLeapYear: Boolean = SimpleDate.isLeapYear(year)
 		def validDate: Boolean = SimpleDate.validDate(month, day, year)
 		def daysInYear: Int = SimpleDate.daysInYear(year)
 		def daysInMonth: Int = SimpleDate.daysInMonth(month, year)
@@ -35,7 +22,7 @@ object Main
 		def ordinalDate: Int = {
 		    var daysTotal = 0
 
-		    (0 until month).foreach {
+			(0 until month).foreach {
 				m => (daysTotal += SimpleDate.daysInMonth(m, year))
 			}
 
@@ -49,7 +36,7 @@ object Main
 		    var newDay = day - 1
 
 		    if(newDay < 1) {
-		    	newMonth = if(newMonth -1 == 0) SimpleDate.NUM_MONTHS else newMonth - 1
+		    	newMonth = if(newMonth - 1 == 0) SimpleDate.NUM_MONTHS else newMonth - 1
 		    	newDay = SimpleDate.daysInMonth(newMonth, year)
 
 		    	if(newMonth == SimpleDate.NUM_MONTHS)
@@ -79,10 +66,10 @@ object Main
 
 		// could take advantage of anonymouse functions here..
 		def daysAgo(n: Int): SimpleDate = {
-			var newDate: SimpleDate = this
+			var newDate = this
 
 			if(n < 0)
-			 	return daysFromNow(n * -1)
+				return daysFromNow(n * -1)
 
 		    for(i <- 0 until n)
 		    	newDate = newDate.prevDate
@@ -91,7 +78,7 @@ object Main
 		}
 
 		def daysFromNow(n: Int): SimpleDate = {
-			var newDate: SimpleDate = this
+			var newDate = this
 
 			if(n < 0)
 				return daysAgo(n * -1)
@@ -101,6 +88,25 @@ object Main
 
 		    newDate
 		}
+
+		def daysBetween(other: SimpleDate): Int = {
+			0
+		}
+
+		def dayOfWeek: WeekDay = {
+			val zellerMonth = if (month > 2) month else month + 12
+		    val yearOfCentury = year % 100
+		    val century = year / 100
+		    val dayWeek = (day - 1 + ((13 * (zellerMonth + 1)) / 5) + yearOfCentury + (yearOfCentury / 4) + (century / 4) + 5 * century) % 7
+
+		    // (1 = Monday to 7 = Sunday)
+		    WeekDay.apply((((dayWeek + 5) % 7) + 1) % 7)
+		}
+
+		override def toString = month + "/" + day + "/" + year
+		override def hashCode: Int = year * daysInYear + ordinalDate
+
+		def compareTo(that: SimpleDate): Int = this.hashCode.compare(that.hashCode)
 	}
 
 	object SimpleDate
@@ -129,10 +135,15 @@ object Main
 		//val date = new SimpleDate(2, 30, 1904) // invalid
 		//val date = new SimpleDate(2, 29, 1905) // invalid
 		//val date = new SimpleDate(2, 29, 1904)
-		val date = new SimpleDate(12, 31, 1905)
+		//val date = new SimpleDate(12, 31, 1905)
+		//val date = new SimpleDate(4, 10, 2012)
+		//val date = new SimpleDate(4, 9, 2012) // BORKED
+		//var date = new SimpleDate(4, 8, 2012)
+		val date = new SimpleDate(4, 16, 2012)
 
 		printf("Testing %s ...\n", date)
 		println("Valid? " + date.validDate)
+		println("Day of week: " + date.dayOfWeek)
 		println("Is leap year? " + date.isLeapYear)
 		println("Ordinal date: " + date.ordinalDate)
 		println("Days in month: " + date.daysInMonth)
